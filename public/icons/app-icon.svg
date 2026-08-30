@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title>Expense Tracker</title>
+  <rect width="512" height="512" rx="96" fill="#111827" />
+  <path d="M128 170h256v172a42 42 0 0 1-42 42H170a42 42 0 0 1-42-42Z" fill="#fff" />
+  <path d="M160 138h192a32 32 0 0 1 32 32H128a32 32 0 0 1 32-32Z" fill="#4b5563" />
+  <path d="M188 230h136M188 276h92M188 322h66" stroke="#111827" stroke-width="24" stroke-linecap="round" />
+  <circle cx="344" cy="322" r="38" fill="#16a34a" />
+  <path d="m326 322 12 12 24-24" stroke="#fff" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

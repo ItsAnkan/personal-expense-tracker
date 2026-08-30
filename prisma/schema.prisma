@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AccountType {
+  BANK_ACCOUNT
+  CASH
+  CREDIT_CARD
+  WALLET
+  OTHER
+}
+
+enum CategoryKind {
+  EXPENSE
+  INCOME
+  BOTH
+}
+
+enum TransactionType {
+  EXPENSE
+  INCOME
+  TRANSFER
+  CREDIT_CARD_PAYMENT
+  REFUND
+}
+
+enum TransactionSource {
+  MANUAL
+  CSV_IMPORT
+  SMS_IMPORT
+  BANK_IMPORT
+}
+
+enum TransactionStatus {
+  POSTED
+  VOIDED
+}
+
+enum BudgetPeriod {
+  MONTHLY
+}
+
+enum ImportBatchSource {
+  CSV
+  SMS
+  BANK
+}
+
+enum ImportBatchStatus {
+  CREATED
+  PREVIEW_READY
+  CONFIRMED
+  PARTIAL
+  FAILED
+}
+
+enum ImportRowStatus {
+  PARSED
+  NEEDS_MAPPING
+  INVALID
+  DUPLICATE
+  READY
+  IMPORTED
+  IGNORED
+}
+
+model User {
+  id              String        @id @default(cuid())
+  email           String        @unique
+  name            String?
+  passwordHash    String
+  defaultCurrency String        @default("INR")
+  timezone        String        @default("Asia/Kolkata")
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  accounts        Account[]
+  categories      Category[]
+  transactions    Transaction[]
+  budgets         Budget[]
+  importBatches   ImportBatch[]
+}
+
+model Account {
+  id             String        @id @default(cuid())
+  userId         String
+  name           String
+  type           AccountType
+  openingBalance Decimal       @db.Decimal(14, 2)
+  currency       String        @default("INR")
+  notes          String?
+  isActive       Boolean       @default(true)
+  sortOrder      Int           @default(0)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  outgoingTxns   Transaction[] @relation("TransactionFromAccount")
+  incomingTxns   Transaction[] @relation("TransactionToAccount")
+
+  @@unique([userId, name])
+  @@index([userId, type])
+}
+
+model Category {
+  id           String        @id @default(cuid())
+  userId       String
+  parentId     String?
+  name         String
+  kind         CategoryKind  @default(EXPENSE)
+  notes        String?
+  isActive     Boolean       @default(true)
+  sortOrder    Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent       Category?     @relation("CategoryTree", fields: [parentId], references: [id], onDelete: Restrict)
+  children     Category[]    @relation("CategoryTree")
+  transactions Transaction[]
+  budgets      Budget[]
+
+  @@unique([userId, parentId, name])
+  @@index([userId, parentId, sortOrder])
+}
+
+model Transaction {
+  id                     String            @id @default(cuid())
+  userId                 String
+  type                   TransactionType
+  status                 TransactionStatus @default(POSTED)
+  source                 TransactionSource @default(MANUAL)
+  occurredAt             DateTime
+  amount                 Decimal           @db.Decimal(14, 2)
+  fromAccountId          String?
+  toAccountId            String?
+  categoryId             String?
+  merchant               String?
+  notes                  String?
+  externalRef            String?
+  importBatchId          String?
+  refundForTransactionId String?
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+  user                   User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fromAccount            Account?          @relation("TransactionFromAccount", fields: [fromAccountId], references: [id], onDelete: Restrict)
+  toAccount              Account?          @relation("TransactionToAccount", fields: [toAccountId], references: [id], onDelete: Restrict)
+  category               Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  importBatch            ImportBatch?      @relation(fields: [importBatchId], references: [id], onDelete: SetNull)
+  refundForTransaction   Transaction?      @relation("RefundChain", fields: [refundForTransactionId], references: [id], onDelete: SetNull)
+  refunds                Transaction[]     @relation("RefundChain")
+
+  @@index([userId, occurredAt])
+  @@index([userId, type, occurredAt])
+  @@index([userId, fromAccountId, occurredAt])
+  @@index([userId, toAccountId, occurredAt])
+  @@index([importBatchId])
+}
+
+model Budget {
+  id         String       @id @default(cuid())
+  userId     String
+  categoryId String?
+  period     BudgetPeriod @default(MONTHLY)
+  monthStart DateTime
+  amount     Decimal      @db.Decimal(14, 2)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category   Category?    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([userId, monthStart])
+  @@index([userId, categoryId, monthStart])
+}
+
+model ImportBatch {
+  id           String            @id @default(cuid())
+  userId       String
+  source       ImportBatchSource
+  status       ImportBatchStatus @default(CREATED)
+  fileName     String?
+  importedAt   DateTime?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rows         ImportRow[]
+  transactions Transaction[]
+
+  @@index([userId, createdAt])
+}
+
+model ImportRow {
+  id               String          @id @default(cuid())
+  batchId          String
+  rowNumber        Int
+  status           ImportRowStatus @default(PARSED)
+  rawData          Json
+  normalizedData   Json?
+  validationErrors Json?
+  duplicateOfId    String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  batch            ImportBatch     @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  @@index([batchId, rowNumber])
+  @@index([batchId, status])
+}
