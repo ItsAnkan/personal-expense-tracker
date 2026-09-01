@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -43,7 +43,7 @@ async function main() {
         userId: user.id,
         name: "HDFC Savings",
         type: "BANK_ACCOUNT",
-        openingBalance: new Prisma.Decimal("50000"),
+        openingBalance: 50000,
         currency: "INR",
         notes: "Demo seed data - removable",
         sortOrder: 1,
@@ -54,7 +54,7 @@ async function main() {
         userId: user.id,
         name: "ICICI Savings",
         type: "BANK_ACCOUNT",
-        openingBalance: new Prisma.Decimal("10000"),
+        openingBalance: 10000,
         currency: "INR",
         notes: "Demo seed data - removable",
         sortOrder: 2,
@@ -65,7 +65,7 @@ async function main() {
         userId: user.id,
         name: "Cash",
         type: "CASH",
-        openingBalance: new Prisma.Decimal("3000"),
+        openingBalance: 3000,
         currency: "INR",
         notes: "Demo seed data - removable",
         sortOrder: 3,
@@ -76,7 +76,7 @@ async function main() {
         userId: user.id,
         name: "HDFC Credit Card",
         type: "CREDIT_CARD",
-        openingBalance: new Prisma.Decimal("0"),
+        openingBalance: 0,
         currency: "INR",
         notes: "Demo seed data - removable",
         sortOrder: 4,
@@ -217,7 +217,7 @@ async function main() {
       data: {
         userId: user.id,
         type: item.type,
-        amount: new Prisma.Decimal(item.amount),
+        amount: Number(item.amount),
         occurredAt: item.occurredAt,
         fromAccountId: item.from ? accountByName.get(item.from)?.id : null,
         toAccountId: item.to ? accountByName.get(item.to)?.id : null,
@@ -241,21 +241,21 @@ async function main() {
         userId: user.id,
         period: "MONTHLY",
         monthStart: monthDate("2026-08-01"),
-        amount: new Prisma.Decimal("50000"),
+        amount: 50000,
       },
       {
         userId: user.id,
         period: "MONTHLY",
         monthStart: monthDate("2026-08-01"),
         categoryId: categoryByName.get("Food"),
-        amount: new Prisma.Decimal("8000"),
+        amount: 8000,
       },
       {
         userId: user.id,
         period: "MONTHLY",
         monthStart: monthDate("2026-08-01"),
         categoryId: categoryByName.get("Shopping"),
-        amount: new Prisma.Decimal("5000"),
+        amount: 5000,
       },
     ],
   });

@@ -1,5 +1,3 @@
-import { Prisma } from "@prisma/client";
-
 import { prisma } from "@/lib/db/prisma";
 
 export async function listBudgetsForMonth(userId: string, monthStart: Date) {
@@ -32,7 +30,7 @@ export async function upsertBudget(input: {
     return prisma.budget.update({
       where: { id: existing.id },
       data: {
-        amount: new Prisma.Decimal(input.amount.toFixed(2)),
+        amount: Number(input.amount.toFixed(2)),
       },
       include: {
         category: true,
@@ -45,7 +43,7 @@ export async function upsertBudget(input: {
       userId: input.userId,
       monthStart: input.monthStart,
       period: "MONTHLY",
-      amount: new Prisma.Decimal(input.amount.toFixed(2)),
+      amount: Number(input.amount.toFixed(2)),
       categoryId: input.categoryId ?? null,
     },
     include: {

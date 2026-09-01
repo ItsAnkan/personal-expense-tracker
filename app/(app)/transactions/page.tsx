@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 import {
   createTransactionAction,
@@ -111,18 +111,18 @@ function getTransactionSign(type: string): "+" | "-" | "neutral" {
 
 function transactionIcon(type: string): string {
   if (type === "INCOME") {
-    return "↗";
+    return "â†—";
   }
   if (type === "EXPENSE") {
-    return "↘";
+    return "â†˜";
   }
   if (type === "TRANSFER") {
-    return "↔";
+    return "â†”";
   }
   if (type === "CREDIT_CARD_PAYMENT") {
-    return "⇄";
+    return "â‡„";
   }
-  return "⟲";
+  return "âŸ²";
 }
 
 function typeTone(type: string): string {
@@ -167,7 +167,6 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
   const sort = asSortMode(getSingleQueryParam(params.sort));
   const datePreset = asDatePreset(getSingleQueryParam(params.datePreset));
   const editId = getSingleQueryParam(params.editId);
-  const viewId = getSingleQueryParam(params.viewId);
   const openAdd = getSingleQueryParam(params.openAdd) === "1";
   const confirmDeleteId = getSingleQueryParam(params.confirmDeleteId);
   const minAmountRaw = getSingleQueryParam(params.minAmount);
@@ -264,7 +263,6 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
 
   const withViewState = (overrides: Record<string, string | null | undefined>) =>
     withParams({
-      viewId: viewId || undefined,
       editId: editId || undefined,
       openAdd: openAdd ? "1" : undefined,
       confirmDeleteId: confirmDeleteId || undefined,
@@ -322,7 +320,6 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
     });
   }
 
-  const selectedTransaction = transactions.find((item) => item.id === (editId ?? viewId));
   const allowDateGrouping = sortBy === "occurredAt";
   type TransactionRecord = (typeof transactions)[number];
   const groupedTransactions = allowDateGrouping
@@ -360,12 +357,12 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
             <p className="text-[11px] uppercase tracking-[0.2em] text-slate-300">Transactions</p>
             <h1 className="mt-1 text-3xl font-bold text-white md:text-4xl">All financial activity</h1>
             <p className="mt-2 text-sm text-slate-200">
-              {dateSummaryLabel} · {transactions.length} records · {formatInr(spent)} spent · {formatInr(income)} income
+              {dateSummaryLabel} Â· {transactions.length} records Â· {formatInr(spent)} spent Â· {formatInr(income)} income
             </p>
           </div>
           <div className="flex w-full gap-2 md:w-auto">
             <Link
-              href={withViewState({ openAdd: "1", editId: null, viewId: null, confirmDeleteId: null })}
+              href={withViewState({ openAdd: "1", editId: null, confirmDeleteId: null })}
               className="inline-flex flex-1 items-center justify-center rounded-xl bg-emerald-400 px-4 py-2.5 text-sm font-semibold text-slate-900 transition hover:bg-emerald-300 md:flex-none"
             >
               + Add transaction
@@ -373,23 +370,23 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
           </div>
         </div>
 
-        <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-6">
-          <Link href={withParams({ datePreset: "this-month", month: monthParam })} className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-center text-sm text-slate-100 transition hover:bg-white/20">
+        <div className="mt-4 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-6 lg:overflow-visible lg:px-0">
+          <Link href={withParams({ datePreset: "this-month", month: monthParam })} className="shrink-0 whitespace-nowrap rounded-full border border-white/20 bg-white/10 px-3 py-2 text-center text-xs font-medium text-slate-100 transition hover:bg-white/20 lg:shrink">
             This month
           </Link>
-          <Link href={withParams({ datePreset: "today" })} className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-center text-sm text-slate-100 transition hover:bg-white/20">
+          <Link href={withParams({ datePreset: "today" })} className="shrink-0 whitespace-nowrap rounded-full border border-white/20 bg-white/10 px-3 py-2 text-center text-xs font-medium text-slate-100 transition hover:bg-white/20 lg:shrink">
             Today
           </Link>
-          <Link href={withParams({ datePreset: "this-week" })} className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-center text-sm text-slate-100 transition hover:bg-white/20">
+          <Link href={withParams({ datePreset: "this-week" })} className="shrink-0 whitespace-nowrap rounded-full border border-white/20 bg-white/10 px-3 py-2 text-center text-xs font-medium text-slate-100 transition hover:bg-white/20 lg:shrink">
             This week
           </Link>
-          <Link href={withParams({ datePreset: "this-month", month: previousMonth })} className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-center text-sm text-slate-100 transition hover:bg-white/20">
+          <Link href={withParams({ datePreset: "this-month", month: previousMonth })} className="shrink-0 whitespace-nowrap rounded-full border border-white/20 bg-white/10 px-3 py-2 text-center text-xs font-medium text-slate-100 transition hover:bg-white/20 lg:shrink">
             Last month
           </Link>
-          <Link href={withParams({ type: "EXPENSE" })} className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-center text-sm text-slate-100 transition hover:bg-white/20">
+          <Link href={withParams({ type: "EXPENSE" })} className="shrink-0 whitespace-nowrap rounded-full border border-white/20 bg-white/10 px-3 py-2 text-center text-xs font-medium text-slate-100 transition hover:bg-white/20 lg:shrink">
             Expenses
           </Link>
-          <Link href={withParams({ type: "INCOME" })} className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-center text-sm text-slate-100 transition hover:bg-white/20">
+          <Link href={withParams({ type: "INCOME" })} className="shrink-0 whitespace-nowrap rounded-full border border-white/20 bg-white/10 px-3 py-2 text-center text-xs font-medium text-slate-100 transition hover:bg-white/20 lg:shrink">
             Income
           </Link>
         </div>
@@ -402,7 +399,7 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
               href={withParams({ month: previousMonth, datePreset: "this-month" })}
               className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
             >
-              ←
+              â†
             </Link>
             <span className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-800">
               {monthLabel}
@@ -411,18 +408,18 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
               href={withParams({ month: nextMonth, datePreset: "this-month" })}
               className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
             >
-              →
+              â†’
             </Link>
           </div>
           <p className="text-sm text-slate-500">Find, review, and correct entries in seconds.</p>
         </div>
 
-        <form className="mt-4 grid gap-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_auto]">
+        <form className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_auto]">
           <input type="hidden" name="month" value={monthParam} />
           <input type="hidden" name="datePreset" value={datePreset} />
-          <label className="relative block">
+          <label className="relative col-span-2 block">
             <span className="sr-only">Search transactions</span>
-            <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-slate-400">⌕</span>
+            <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-slate-400">âŒ•</span>
             <input
               name="q"
               defaultValue={q ?? ""}
@@ -465,7 +462,7 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
             <option value="lowest">Lowest amount</option>
           </select>
 
-          <button className="h-12 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800">
+          <button className="col-span-2 h-12 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800 lg:col-span-1">
             Apply
           </button>
 
@@ -514,7 +511,7 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
               {activeFilters.map((filter) => (
                 <Link key={filter.key} href={filter.href} className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-100">
                   <span>{filter.label}</span>
-                  <span aria-hidden>×</span>
+                  <span aria-hidden>Ã—</span>
                 </Link>
               ))}
             </div>
@@ -553,255 +550,270 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
         </section>
       ) : null}
 
-      <section className={selectedTransaction ? "grid gap-4 xl:grid-cols-[1fr_22rem]" : "space-y-3"}>
-        <div className="space-y-3">
-          {transactions.length === 0 ? (
-            <div className="rounded-[24px] border border-slate-200 bg-white p-8 text-center shadow-[0_14px_30px_rgba(15,23,42,0.05)]">
-              <p className="text-lg font-semibold text-slate-900">No transactions found</p>
-              <p className="mt-1 text-sm text-slate-600">Try changing your search or filters.</p>
-              <div className="mt-4 flex justify-center">
-                <Link
-                  href={withParams({ q: null, type: null, accountId: null, categoryId: null, datePreset: "this-month", minAmount: null, maxAmount: null })}
-                  className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700"
-                >
-                  Clear filters
-                </Link>
-              </div>
+      <section className="space-y-3">
+        {transactions.length === 0 ? (
+          <div className="rounded-[24px] border border-slate-200 bg-white p-8 text-center shadow-[0_14px_30px_rgba(15,23,42,0.05)]">
+            <p className="text-lg font-semibold text-slate-900">No transactions found</p>
+            <p className="mt-1 text-sm text-slate-600">Try changing your search or filters.</p>
+            <div className="mt-4 flex justify-center">
+              <Link
+                href={withParams({ q: null, type: null, accountId: null, categoryId: null, datePreset: "this-month", minAmount: null, maxAmount: null })}
+                className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700"
+              >
+                Clear filters
+              </Link>
             </div>
-          ) : (
-            groupedTransactions.map((group) => (
-              <section key={group.day} className="space-y-2">
-                {allowDateGrouping ? (
-                  <div className="flex items-center justify-between px-1 pt-1">
-                    <h2 className="text-xs font-semibold tracking-[0.14em] text-slate-500 uppercase">{dayHeading(group.day)}</h2>
-                    <span className="text-xs text-slate-400">{group.items.length} item{group.items.length > 1 ? "s" : ""}</span>
-                  </div>
-                ) : null}
+          </div>
+        ) : (
+          groupedTransactions.map((group) => (
+            <section key={group.day} className="space-y-2">
+              {allowDateGrouping ? (
+                <div className="flex items-center justify-between px-1 pt-1">
+                  <h2 className="text-xs font-semibold tracking-[0.14em] text-slate-500 uppercase">{dayHeading(group.day)}</h2>
+                  <span className="text-xs text-slate-400">{group.items.length} item{group.items.length > 1 ? "s" : ""}</span>
+                </div>
+              ) : null}
 
-                <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_14px_30px_rgba(15,23,42,0.05)]">
-                  <div className="hidden grid-cols-[7rem_1.9fr_1fr_1fr_8rem_8rem] gap-3 border-b border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-semibold tracking-[0.14em] text-slate-500 uppercase md:grid">
-                    <span>Date</span>
-                    <span>Transaction</span>
-                    <span>Category</span>
-                    <span>Account</span>
-                    <span className="text-right">Amount</span>
-                    <span className="text-right">Actions</span>
-                  </div>
+              <div className="overflow-hidden rounded-[24px] border border-slate-200 bg-white shadow-[0_14px_30px_rgba(15,23,42,0.05)]">
+                <div className="hidden grid-cols-[7rem_1.9fr_1fr_1fr_8rem_9rem] gap-3 border-b border-slate-200 bg-slate-50 px-4 py-2 text-[11px] font-semibold tracking-[0.14em] text-slate-500 uppercase md:grid">
+                  <span>Date</span>
+                  <span>Transaction</span>
+                  <span>Category</span>
+                  <span>Account</span>
+                  <span className="text-right">Amount</span>
+                  <span className="text-right">Actions</span>
+                </div>
 
-                  {group.items.map((transaction) => {
-                    const isEditing = editId === transaction.id;
-                    const isViewing = viewId === transaction.id || editId === transaction.id;
-                    const categoryName = categoryLabel(transaction.categoryId, categoryMap);
-                    const sign = getTransactionSign(transaction.type);
-                    const amount = Number(transaction.amount);
-                    const amountLabel = sign === "neutral" ? formatInr(amount) : `${sign}${formatInr(amount)}`;
-                    const accountLabel =
-                      transaction.type === "TRANSFER" || transaction.type === "CREDIT_CARD_PAYMENT"
-                        ? `${transaction.fromAccount?.name ?? "-"} → ${transaction.toAccount?.name ?? "-"}`
-                        : transaction.type === "INCOME" || transaction.type === "REFUND"
-                          ? transaction.toAccount?.name ?? "-"
-                          : transaction.fromAccount?.name ?? "-";
+                {group.items.map((transaction) => {
+                  const isEditing = editId === transaction.id;
+                  const categoryName = categoryLabel(transaction.categoryId, categoryMap);
+                  const sign = getTransactionSign(transaction.type);
+                  const amount = Number(transaction.amount);
+                  const amountLabel = sign === "neutral" ? formatInr(amount) : `${sign}${formatInr(amount)}`;
+                  const accountLabel =
+                    transaction.type === "TRANSFER" || transaction.type === "CREDIT_CARD_PAYMENT"
+                      ? `${transaction.fromAccount?.name ?? "-"} â†’ ${transaction.toAccount?.name ?? "-"}`
+                      : transaction.type === "INCOME" || transaction.type === "REFUND"
+                        ? transaction.toAccount?.name ?? "-"
+                        : transaction.fromAccount?.name ?? "-";
 
-                    if (isEditing) {
-                      return (
-                        <article key={transaction.id} className="border-t border-slate-200 p-4 first:border-t-0">
-                          <p className="text-xs font-semibold tracking-[0.12em] text-slate-500 uppercase">Editing transaction</p>
-                          <TransactionForm
-                            mode="edit"
-                            action={updateTransactionAction}
-                            accounts={transactionFormAccounts}
-                            categories={categories}
-                            transactionId={transaction.id}
-                            defaultValues={{
-                              type: transaction.type,
-                              amount: Number(transaction.amount).toFixed(2),
-                              occurredAt: dateInputValue(transaction.occurredAt),
-                              fromAccountId: transaction.fromAccountId ?? "",
-                              toAccountId: transaction.toAccountId ?? "",
-                              categoryId: transaction.categoryId ?? "",
-                              merchant: transaction.merchant ?? "",
-                              notes: transaction.notes ?? "",
-                              refundForTransactionId: transaction.refundForTransactionId ?? "",
-                            }}
-                          />
-                          <div className="mt-3">
-                            <Link href={withViewState({ editId: null, viewId: transaction.id })} className="text-sm font-medium text-slate-700 hover:text-slate-900">
-                              Cancel edit
-                            </Link>
-                          </div>
-                        </article>
-                      );
-                    }
-
+                  if (isEditing) {
                     return (
-                      <article key={transaction.id} className={`border-t border-slate-200 px-4 py-3 first:border-t-0 ${isViewing ? "bg-slate-50/70" : ""}`}>
-                        <div className="hidden grid-cols-[7rem_1.9fr_1fr_1fr_8rem_8rem] items-center gap-3 md:grid">
-                          <p className="text-sm text-slate-600">{formatDate(transaction.occurredAt)}</p>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
-                                {transactionIcon(transaction.type)}
-                              </span>
-                              <p className="truncate text-sm font-semibold text-slate-900">
-                                {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
-                              </p>
-                            </div>
-                            {transaction.notes ? (
-                              <p className="mt-1 truncate text-xs text-slate-500">{transaction.notes}</p>
-                            ) : null}
-                          </div>
-                          <div className="min-w-0">
-                            {categoryName === "-" ? (
-                              <span className="text-sm text-slate-400">—</span>
-                            ) : (
-                              <CategoryChip name={categoryName} className="max-w-full truncate" />
-                            )}
-                          </div>
-                          <p className="truncate text-sm text-slate-600">{accountLabel}</p>
-                          <p className={`text-right text-sm font-semibold ${sign === "+" ? "text-emerald-700" : sign === "-" ? "text-slate-900" : "text-slate-700"}`}>
-                            {amountLabel}
-                          </p>
-                          <div className="flex justify-end gap-1.5">
-                            <Link href={withViewState({ viewId: transaction.id, editId: null, confirmDeleteId: null })} className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100">
-                              View
-                            </Link>
-                            <Link href={withViewState({ editId: transaction.id, viewId: transaction.id, openAdd: null, confirmDeleteId: null })} className="rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100">
-                              Edit
-                            </Link>
-                          </div>
+                      <article key={transaction.id} className="border-t border-slate-200 p-4 first:border-t-0">
+                        <p className="text-xs font-semibold tracking-[0.12em] text-slate-500 uppercase">Editing transaction</p>
+                        <TransactionForm
+                          mode="edit"
+                          action={updateTransactionAction}
+                          accounts={transactionFormAccounts}
+                          categories={categories}
+                          transactionId={transaction.id}
+                          defaultValues={{
+                            type: transaction.type,
+                            amount: Number(transaction.amount).toFixed(2),
+                            occurredAt: dateInputValue(transaction.occurredAt),
+                            fromAccountId: transaction.fromAccountId ?? "",
+                            toAccountId: transaction.toAccountId ?? "",
+                            categoryId: transaction.categoryId ?? "",
+                            merchant: transaction.merchant ?? "",
+                            notes: transaction.notes ?? "",
+                            refundForTransactionId: transaction.refundForTransactionId ?? "",
+                          }}
+                        />
+                        <div className="mt-3">
+                          <Link href={withViewState({ editId: null, confirmDeleteId: null })} className="text-sm font-medium text-slate-700 hover:text-slate-900">
+                            Cancel edit
+                          </Link>
                         </div>
+                      </article>
+                    );
+                  }
 
-                        <div className="md:hidden">
-                          <details className="group rounded-xl">
-                            <summary className="list-none rounded-xl p-1">
-                              <div className="flex items-start justify-between gap-3">
-                                <div className="min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <span className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
-                                      {transactionIcon(transaction.type)}
-                                    </span>
-                                    <div className="min-w-0">
-                                      <p className="truncate text-sm font-semibold text-slate-900">
-                                        {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
-                                      </p>
-                                      <p className="truncate text-xs text-slate-500">{categoryName === "-" ? typeLabelMap[transaction.type as TransactionType] : categoryName}</p>
-                                    </div>
-                                  </div>
-                                  <p className="mt-1 truncate text-xs text-slate-500">{accountLabel}</p>
-                                </div>
-                                <div className="text-right">
-                                  <p className={`text-sm font-semibold ${sign === "+" ? "text-emerald-700" : sign === "-" ? "text-slate-900" : "text-slate-700"}`}>
-                                    {amountLabel}
+                  return (
+                    <article key={transaction.id} className={`border-t border-slate-200 px-4 py-3 first:border-t-0 ${confirmDeleteId === transaction.id ? "bg-rose-50/40" : ""}`}>
+                      <details className="group hidden md:block">
+                        <summary className="list-none cursor-pointer">
+                          <div className="grid grid-cols-[7rem_1.9fr_1fr_1fr_8rem_9rem] items-center gap-3">
+                            <p className="text-sm text-slate-600">{formatDate(transaction.occurredAt)}</p>
+                            <div className="min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
+                                  {transactionIcon(transaction.type)}
+                                </span>
+                                <p className="truncate text-sm font-semibold text-slate-900">
+                                  {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="min-w-0">
+                              {categoryName === "-" ? (
+                                <span className="text-sm text-slate-400">â€”</span>
+                              ) : (
+                                <CategoryChip name={categoryName} className="max-w-full truncate" />
+                              )}
+                            </div>
+                            <p className="truncate text-sm text-slate-600">{accountLabel}</p>
+                            <p className={`text-right text-sm font-semibold ${sign === "+" ? "text-emerald-700" : sign === "-" ? "text-slate-900" : "text-slate-700"}`}>
+                              {amountLabel}
+                            </p>
+                            <div className="flex items-center justify-end gap-1.5">
+                              <Link
+                                aria-label="Edit transaction"
+                                href={withViewState({ editId: transaction.id, openAdd: null, confirmDeleteId: null })}
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm text-slate-700"
+                              >
+                                âœŽ
+                              </Link>
+                              <Link
+                                aria-label="Delete transaction"
+                                href={withViewState({ editId: null, confirmDeleteId: transaction.id })}
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-sm text-rose-700"
+                              >
+                                ðŸ—‘
+                              </Link>
+                            </div>
+                          </div>
+                        </summary>
+
+                        <div className="mt-2 border-t border-slate-200 pt-2">
+                          <div className="grid gap-2 rounded-xl bg-slate-50 p-3 text-xs text-slate-600 sm:grid-cols-2">
+                            {transaction.merchant ? (
+                              <p>
+                                <span className="font-medium text-slate-800">Merchant:</span> {transaction.merchant}
+                              </p>
+                            ) : null}
+                            <p>
+                              <span className="font-medium text-slate-800">Type:</span> {typeLabelMap[transaction.type as TransactionType]}
+                            </p>
+                            <p>
+                              <span className="font-medium text-slate-800">Category:</span> {categoryName === "-" ? "Not set" : categoryName}
+                            </p>
+                            <p>
+                              <span className="font-medium text-slate-800">Account:</span> {accountLabel}
+                            </p>
+                            <p className="sm:col-span-2">
+                              <span className="font-medium text-slate-800">Notes:</span> {transaction.notes ?? "No notes"}
+                            </p>
+                          </div>
+
+                          {confirmDeleteId === transaction.id ? (
+                            <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
+                              <p className="text-sm font-semibold text-rose-900">Delete this transaction?</p>
+                              <p className="mt-1 text-xs text-rose-800">This updates account balances and monthly reports.</p>
+                              <div className="mt-3 flex gap-2">
+                                <Link
+                                  href={withViewState({ confirmDeleteId: null })}
+                                  className="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-700"
+                                >
+                                  Cancel
+                                </Link>
+                                <form action={deleteTransactionAction}>
+                                  <input type="hidden" name="transactionId" value={transaction.id} />
+                                  <button className="rounded-lg bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-700">
+                                    Delete
+                                  </button>
+                                </form>
+                              </div>
+                            </div>
+                          ) : null}
+                        </div>
+                      </details>
+
+                      <details className="group md:hidden">
+                        <summary className="list-none cursor-pointer rounded-xl border border-slate-200 bg-slate-50/40 p-2">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-2">
+                                <span className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
+                                  {transactionIcon(transaction.type)}
+                                </span>
+                                <div className="min-w-0 flex-1">
+                                  <p className="truncate text-sm font-semibold text-slate-900">
+                                    {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
                                   </p>
-                                  <p className="mt-1 text-xs text-slate-500">{formatDate(transaction.occurredAt)}</p>
+                                  <p className="truncate text-xs text-slate-500">{categoryName === "-" ? typeLabelMap[transaction.type as TransactionType] : categoryName}</p>
                                 </div>
                               </div>
                               <div className="mt-2 flex items-center justify-between gap-2">
                                 <TransactionTypeBadge type={transaction.type} />
-                                <span className="text-xs font-medium text-slate-500 group-open:hidden">Tap to expand</span>
-                                <span className="hidden text-xs font-medium text-slate-500 group-open:inline">Tap to collapse</span>
+                                <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-slate-400">Details</span>
                               </div>
-                            </summary>
-                            <div className="mt-2 space-y-2 rounded-xl border border-slate-200 bg-slate-50 p-3">
-                              {transaction.notes ? (
-                                <p className="text-xs text-slate-600">{transaction.notes}</p>
-                              ) : (
-                                <p className="text-xs text-slate-500">No notes</p>
-                              )}
-                              <div className="flex gap-2">
+                            </div>
+                            <div className="flex shrink-0 flex-col items-end gap-2">
+                              <p className={`text-sm font-semibold ${sign === "+" ? "text-emerald-700" : sign === "-" ? "text-slate-900" : "text-slate-700"}`}>
+                                {amountLabel}
+                              </p>
+                              <div className="flex items-center gap-1.5">
                                 <Link
-                                  href={withViewState({ editId: transaction.id, viewId: transaction.id, openAdd: null, confirmDeleteId: null })}
-                                  className="flex-1 rounded-lg border border-slate-200 bg-white px-3 py-2 text-center text-xs font-medium text-slate-700"
+                                  aria-label="Edit transaction"
+                                  href={withViewState({ editId: transaction.id, openAdd: null, confirmDeleteId: null })}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm text-slate-700"
                                 >
-                                  Edit
+                                  âœŽ
                                 </Link>
                                 <Link
-                                  href={withViewState({ viewId: transaction.id, editId: null, confirmDeleteId: transaction.id })}
-                                  className="flex-1 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-center text-xs font-medium text-rose-700"
+                                  aria-label="Delete transaction"
+                                  href={withViewState({ editId: null, confirmDeleteId: transaction.id })}
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-sm text-rose-700"
                                 >
-                                  Delete
+                                  ðŸ—‘
                                 </Link>
                               </div>
                             </div>
-                          </details>
+                          </div>
+                        </summary>
+
+                        <div className="mt-2 rounded-xl border border-slate-200 bg-white p-2">
+                          <div className="space-y-1.5 rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-600">
+                            <p>
+                              <span className="font-medium text-slate-800">Date:</span> {formatDate(transaction.occurredAt)}
+                            </p>
+                            {transaction.merchant ? (
+                              <p>
+                                <span className="font-medium text-slate-800">Merchant:</span> {transaction.merchant}
+                              </p>
+                            ) : null}
+                            <p>
+                              <span className="font-medium text-slate-800">Category:</span> {categoryName === "-" ? "Not set" : categoryName}
+                            </p>
+                            <p>
+                              <span className="font-medium text-slate-800">Account:</span> {accountLabel}
+                            </p>
+                            <p>
+                              <span className="font-medium text-slate-800">Notes:</span> {transaction.notes ?? "No notes"}
+                            </p>
+                          </div>
+
+                          {confirmDeleteId === transaction.id ? (
+                            <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
+                              <p className="text-sm font-semibold text-rose-900">Delete this transaction?</p>
+                              <p className="mt-1 text-xs text-rose-800">This updates account balances and monthly reports.</p>
+                              <div className="mt-3 flex gap-2">
+                                <Link
+                                  href={withViewState({ confirmDeleteId: null })}
+                                  className="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-700"
+                                >
+                                  Cancel
+                                </Link>
+                                <form action={deleteTransactionAction}>
+                                  <input type="hidden" name="transactionId" value={transaction.id} />
+                                  <button className="rounded-lg bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-700">
+                                    Delete
+                                  </button>
+                                </form>
+                              </div>
+                            </div>
+                          ) : null}
                         </div>
-                      </article>
-                    );
-                  })}
-                </div>
-              </section>
-            ))
-          )}
-        </div>
-
-        {selectedTransaction ? (
-          <aside className="rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_14px_30px_rgba(15,23,42,0.05)] xl:sticky xl:top-24 xl:self-start">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-xs font-semibold tracking-[0.14em] text-slate-500 uppercase">Transaction detail</p>
-              <Link href={withViewState({ viewId: null, editId: null, confirmDeleteId: null })} className="text-sm font-medium text-slate-600 hover:text-slate-900">
-                Close
-              </Link>
-            </div>
-            <div className="mt-3">
-              <p className="text-sm text-slate-500">{formatDate(selectedTransaction.occurredAt)}</p>
-              <p className="mt-1 text-3xl font-bold text-slate-900">{formatInr(Number(selectedTransaction.amount))}</p>
-            </div>
-            <div className="mt-3">
-              <TransactionTypeBadge type={selectedTransaction.type} />
-            </div>
-            <dl className="mt-4 space-y-3 text-sm">
-              <div>
-                <dt className="text-slate-500">Merchant</dt>
-                <dd className="font-medium text-slate-900">{selectedTransaction.merchant ?? "—"}</dd>
+                      </details>
+                    </article>
+                  );
+                })}
               </div>
-              <div>
-                <dt className="text-slate-500">Category</dt>
-                <dd className="font-medium text-slate-900">{categoryLabel(selectedTransaction.categoryId, categoryMap)}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500">From</dt>
-                <dd className="font-medium text-slate-900">{selectedTransaction.fromAccount?.name ?? "—"}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500">To</dt>
-                <dd className="font-medium text-slate-900">{selectedTransaction.toAccount?.name ?? "—"}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500">Notes</dt>
-                <dd className="font-medium text-slate-900">{selectedTransaction.notes ?? "—"}</dd>
-              </div>
-            </dl>
-            <div className="mt-5 flex gap-2">
-              <Link href={withViewState({ editId: selectedTransaction.id, viewId: selectedTransaction.id, openAdd: null })} className="flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-center text-sm font-medium text-slate-700 transition hover:bg-slate-100">
-                Edit
-              </Link>
-              <Link href={withViewState({ confirmDeleteId: selectedTransaction.id })} className="flex-1 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-center text-sm font-medium text-rose-700 transition hover:bg-rose-100">
-                Delete
-              </Link>
-            </div>
-
-            {confirmDeleteId === selectedTransaction.id ? (
-              <div className="mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-3">
-                <p className="text-sm font-semibold text-rose-900">Delete this transaction?</p>
-                <p className="mt-1 text-xs text-rose-800">
-                  This updates account balances and monthly reports.
-                </p>
-                <div className="mt-3 flex gap-2">
-                  <Link href={withViewState({ confirmDeleteId: null })} className="flex-1 rounded-lg border border-rose-200 bg-white px-3 py-2 text-center text-sm font-medium text-rose-700">
-                    Cancel
-                  </Link>
-                  <form action={deleteTransactionAction} className="flex-1">
-                    <input type="hidden" name="transactionId" value={selectedTransaction.id} />
-                    <button className="w-full rounded-lg bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-700">
-                      Delete
-                    </button>
-                  </form>
-                </div>
-              </div>
-            ) : null}
-          </aside>
-        ) : null}
+            </section>
+          ))
+        )}
       </section>
     </main>
   );
 }
+

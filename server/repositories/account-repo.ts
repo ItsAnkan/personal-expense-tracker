@@ -1,4 +1,4 @@
-import { AccountType, Prisma } from "@prisma/client";
+import { AccountType } from "@prisma/client";
 
 import { prisma } from "@/lib/db/prisma";
 
@@ -19,7 +19,7 @@ export async function createAccount(input: {
   userId: string;
   name: string;
   type: AccountType;
-  openingBalance: Prisma.Decimal;
+  openingBalance: number;
   currency: string;
   notes?: string | null;
 }) {

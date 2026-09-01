@@ -10,7 +10,17 @@ const signInSchema = z.object({
   password: z.string().min(8),
 });
 
+const authSecret =
+  process.env.AUTH_SECRET ??
+  process.env.NEXTAUTH_SECRET ??
+  (process.env.NODE_ENV === "production" ? undefined : "expense-tracker-dev-secret-change-me");
+
+if (!authSecret && process.env.NODE_ENV === "production") {
+  throw new Error("Missing NEXTAUTH_SECRET or AUTH_SECRET. Set one in your production environment.");
+}
+
 export const authOptions: NextAuthOptions = {
+  secret: authSecret,
   session: {
     strategy: "jwt",
   },

@@ -50,8 +50,8 @@
 }
 
 :root {
-  --app-font-sans: var(--font-inter);
-  --app-font-heading: var(--font-inter);
+  --app-font-sans: var(--font-inter, "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif);
+  --app-font-heading: var(--font-inter, "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif);
   --app-shell-gradient:
     radial-gradient(circle at top, rgba(184, 109, 59, 0.14), transparent 32%),
     linear-gradient(180deg, #f5f0e8 0%, #f7f3ee 100%);
@@ -94,13 +94,13 @@
 }
 
 [data-font-theme="google-sans"] {
-  --app-font-sans: var(--font-nunito-sans);
-  --app-font-heading: var(--font-nunito-sans);
+  --app-font-sans: var(--font-nunito-sans, "Google Sans", "Segoe UI", sans-serif);
+  --app-font-heading: var(--font-nunito-sans, "Google Sans", "Segoe UI", sans-serif);
 }
 
 [data-font-theme="inter"] {
-  --app-font-sans: var(--font-inter);
-  --app-font-heading: var(--font-inter);
+  --app-font-sans: var(--font-inter, "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif);
+  --app-font-heading: var(--font-inter, "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif);
 }
 
 [data-color-theme="forest"] {
@@ -259,15 +259,17 @@
   html {
     @apply scroll-smooth font-sans;
     background: var(--app-shell-gradient);
+    font-family: var(--app-font-sans);
   }
 
   body {
     @apply min-h-screen bg-background text-foreground antialiased;
     background-image: var(--app-body-gradient);
+    font-family: var(--app-font-sans);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-display), serif;
+    font-family: var(--app-font-heading, var(--app-font-sans));
     letter-spacing: -0.04em;
   }
 

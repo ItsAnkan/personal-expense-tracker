@@ -7,7 +7,7 @@ Ledger-first personal finance application focused on financial correctness, over
 This repository currently includes **Phase 1 (Foundation)**, **Phase 2 (Accounting Core)**, **Phase 3 (Core UI + CRUD flows)**, and **Phase 4 (Analytics + Budgets)**:
 
 - Next.js + TypeScript + Tailwind + shadcn/ui setup
-- PostgreSQL + Prisma schema and migration-ready setup
+- MongoDB + Prisma schema setup
 - Seed script with realistic 3-month demo data
 - Basic authentication using NextAuth Credentials
 - PWA manifest + icon setup
@@ -33,7 +33,7 @@ This repository currently includes **Phase 1 (Foundation)**, **Phase 2 (Accounti
 
 - `app/`: Next.js App Router pages and API routes
 - `lib/`: infrastructure (Prisma client, auth config, shared utils)
-- `prisma/`: schema, migrations, seed data
+- `prisma/`: schema and seed data
 - `domain/` (planned in next phase): accounting engine and business rules (UI-independent)
 - `server/use-cases/` (planned): application-layer orchestration over domain + repositories
 
@@ -44,7 +44,7 @@ This repository currently includes **Phase 1 (Foundation)**, **Phase 2 (Accounti
 - React
 - Tailwind CSS
 - shadcn/ui
-- PostgreSQL
+- MongoDB
 - Prisma ORM
 - Zod
 - Recharts
@@ -54,7 +54,7 @@ This repository currently includes **Phase 1 (Foundation)**, **Phase 2 (Accounti
 
 - Node.js 20+
 - npm 10+
-- PostgreSQL 15+ (or Neon/Supabase Postgres)
+- MongoDB 6+ (Atlas or self-hosted)
 
 ## Environment variables
 
@@ -66,7 +66,7 @@ cp .env.example .env
 
 Required:
 
-- `DATABASE_URL`: PostgreSQL connection string
+- `DATABASE_URL`: MongoDB connection string
 - `NEXTAUTH_URL`: App URL (local: `http://localhost:3000`)
 - `NEXTAUTH_SECRET`: long random secret
 - `DEMO_USER_EMAIL`: seeded demo login email
@@ -80,7 +80,7 @@ Required:
    npm install
    ```
 
-2. Run migrations (development):
+2. Push Prisma schema (development):
 
    ```bash
    npm run db:migrate:dev
@@ -105,8 +105,8 @@ Required:
 ## Prisma commands
 
 - Generate client: `npm run db:generate`
-- Dev migration: `npm run db:migrate:dev`
-- Deploy migration: `npm run db:migrate:deploy`
+- Push schema (dev): `npm run db:migrate:dev`
+- Push schema (deploy): `npm run db:migrate:deploy`
 - Seed: `npm run db:seed`
 - Studio: `npm run db:studio`
 
@@ -148,11 +148,11 @@ All seed records are marked as demo in notes where relevant (`[DEMO]`).
 4. Set build command: `npm run build`.
 5. Set install command: `npm install`.
 
-### PostgreSQL (Neon/Supabase)
+### MongoDB (Atlas or self-hosted)
 
-1. Create a Postgres database.
+1. Create a MongoDB database.
 2. Copy the connection URL to `DATABASE_URL`.
-3. Run production migrations:
+3. Push schema to production:
 
    ```bash
    npm run db:migrate:deploy

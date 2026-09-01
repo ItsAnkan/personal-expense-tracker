@@ -19,25 +19,37 @@ export function ThemePreferences() {
   const [colorTheme, setColorTheme] = useState<ColorTheme>("warm");
 
   useEffect(() => {
-    const rawFont = localStorage.getItem(FONT_STORAGE_KEY);
-    const rawColor = localStorage.getItem(COLOR_STORAGE_KEY);
-    const nextFont: FontTheme = rawFont === "google-sans" ? "google-sans" : "inter";
-    const nextColor: ColorTheme =
-      rawColor === "forest" || rawColor === "ocean" ? rawColor : "warm";
-    setFontTheme(nextFont);
-    setColorTheme(nextColor);
-    applyTheme(nextFont, nextColor);
+    try {
+      const rawFont = localStorage.getItem(FONT_STORAGE_KEY);
+      const rawColor = localStorage.getItem(COLOR_STORAGE_KEY);
+      const nextFont: FontTheme = rawFont === "google-sans" ? "google-sans" : "inter";
+      const nextColor: ColorTheme =
+        rawColor === "forest" || rawColor === "ocean" ? rawColor : "warm";
+      setFontTheme(nextFont);
+      setColorTheme(nextColor);
+      applyTheme(nextFont, nextColor);
+    } catch {
+      applyTheme("inter", "warm");
+    }
   }, []);
 
   const handleFontChange = (value: FontTheme) => {
     setFontTheme(value);
-    localStorage.setItem(FONT_STORAGE_KEY, value);
+    try {
+      localStorage.setItem(FONT_STORAGE_KEY, value);
+    } catch {
+      // Ignore storage issues in privacy-restricted browsers.
+    }
     applyTheme(value, colorTheme);
   };
 
   const handleColorChange = (value: ColorTheme) => {
     setColorTheme(value);
-    localStorage.setItem(COLOR_STORAGE_KEY, value);
+    try {
+      localStorage.setItem(COLOR_STORAGE_KEY, value);
+    } catch {
+      // Ignore storage issues in privacy-restricted browsers.
+    }
     applyTheme(fontTheme, value);
   };
 
