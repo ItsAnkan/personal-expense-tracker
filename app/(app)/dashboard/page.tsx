@@ -1,4 +1,7 @@
-﻿import Link from "next/link";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import CheckIcon from "@mui/icons-material/Check";
+import Link from "next/link";
 
 import { DashboardCharts } from "@/components/charts/dashboard-charts";
 import { CategoryChip } from "@/components/ui/category-chip";
@@ -68,15 +71,17 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <div className="flex items-center gap-2 self-start md:self-auto">
             <Link
               href={`/dashboard?month=${previousMonth}`}
-              className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10"
+              className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10"
             >
-              ← Prev
+              <ArrowBackIcon className="h-4 w-4" />
+              <span>Prev</span>
             </Link>
             <Link
               href={`/dashboard?month=${nextMonth}`}
-              className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10"
+              className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10"
             >
-              Next →
+              <span>Next</span>
+              <ArrowForwardIcon className="h-4 w-4" />
             </Link>
           </div>
         </div>
@@ -310,7 +315,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               {insights.length > 0 ? (
                 insights.map((item) => (
                   <li key={item} className="flex gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm text-slate-700">
-                    <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-[10px] font-bold text-emerald-700">✓</span>
+                    <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700">
+                      <CheckIcon className="h-3 w-3" />
+                    </span>
                     <span>{item}</span>
                   </li>
                 ))

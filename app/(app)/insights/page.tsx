@@ -1,4 +1,7 @@
-﻿import { requireUserSession } from "@/lib/auth/session";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
+import { requireUserSession } from "@/lib/auth/session";
 import { formatInr, formatMonthLabel, monthToParam, parseMonthParam, shiftMonth } from "@/lib/format";
 import { getDashboardData } from "@/server/use-cases/get-dashboard";
 
@@ -86,8 +89,14 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
             <h1 className="mt-1 text-2xl font-bold text-slate-900">{formatMonthLabel(month)}</h1>
           </div>
           <div className="flex items-center gap-2">
-            <a href={`/insights?month=${previousMonth}`} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">← Prev</a>
-            <a href={`/insights?month=${nextMonth}`} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700">Next →</a>
+            <a href={`/insights?month=${previousMonth}`} className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 hover:bg-slate-100">
+              <ArrowBackIcon className="h-4 w-4" />
+              <span>Prev</span>
+            </a>
+            <a href={`/insights?month=${nextMonth}`} className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 hover:bg-slate-100">
+              <span>Next</span>
+              <ArrowForwardIcon className="h-4 w-4" />
+            </a>
           </div>
         </div>
       </section>

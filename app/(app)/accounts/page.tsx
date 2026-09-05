@@ -1,3 +1,4 @@
+import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 
 import { createAccountingEngine } from "@/domain/accounting/engine";
@@ -123,8 +124,9 @@ export default async function AccountsPage({ searchParams }: AccountsPageProps) 
             placeholder="Optional notes"
             className="h-10 rounded-md border border-emerald-200 bg-white px-3 md:col-span-2"
           />
-          <button className="h-10 rounded-md bg-emerald-700 px-4 text-sm font-semibold text-white md:col-span-3">
-            Add account
+          <button className="inline-flex h-10 items-center justify-center gap-1.5 rounded-md bg-emerald-700 px-4 text-sm font-semibold text-white transition hover:bg-emerald-800 md:col-span-3">
+            <AddIcon className="h-4 w-4" />
+            <span>Add account</span>
           </button>
         </form>
       </section>
