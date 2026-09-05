@@ -605,22 +605,8 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
                         ? transaction.toAccount?.name ?? "-"
                         : transaction.fromAccount?.name ?? "-";
 
-                  if (isEditing) {
+                                    if (isEditing) {
                     return (
-                      <article key={transaction.id} className={`border-t border-slate-200 px-4 py-3 first:border-t-0 ${isViewing ? "bg-slate-50/70" : ""}`}>
-                        <div className="hidden grid-cols-[7rem_1.9fr_1fr_1fr_8rem_8rem] items-center gap-3 md:grid">
-                          <p className="text-sm text-slate-600">{formatDate(transaction.occurredAt)}</p>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
-                                {(() => {
-                                  const Icon = transactionIcon(transaction.type);
-                                  return <Icon className="h-4 w-4" />;
-                                })()}
-                              </span>
-                              <p className="truncate text-sm font-semibold text-slate-900">
-                                {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
-                              </p>
                       <article key={transaction.id} className="border-t border-slate-200 p-4 first:border-t-0">
                         <p className="text-xs font-semibold tracking-[0.12em] text-slate-500 uppercase">Editing transaction</p>
                         <TransactionForm
@@ -652,125 +638,82 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
 
                   return (
                     <article key={transaction.id} className={`border-t border-slate-200 px-4 py-3 first:border-t-0 ${confirmDeleteId === transaction.id ? "bg-rose-50/40" : ""}`}>
-                      <details className="group hidden md:block">
-                        <summary className="list-none cursor-pointer">
-                          <div className="grid grid-cols-[7rem_1.9fr_1fr_1fr_8rem_9rem] items-center gap-3">
-                            <p className="text-sm text-slate-600">{formatDate(transaction.occurredAt)}</p>
-                            <div className="min-w-0">
-                              <div className="flex items-center gap-2">
-                                <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
-                                  {transactionIcon(transaction.type)}
-                                </span>
-                                <p className="truncate text-sm font-semibold text-slate-900">
-                                  {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
-                                </p>
-                              </div>
-                            </div>
-                            <div className="min-w-0">
-                              {categoryName === "-" ? (
-                                <span className="text-sm text-slate-400">â€”</span>
-                              ) : (
-                                <CategoryChip name={categoryName} className="max-w-full truncate" />
-                              )}
-                            </div>
-                            <p className="truncate text-sm text-slate-600">{accountLabel}</p>
-                            <p className={`text-right text-sm font-semibold ${sign === "+" ? "text-emerald-700" : sign === "-" ? "text-slate-900" : "text-slate-700"}`}>
-                              {amountLabel}
-                            </p>
-                            <div className="flex items-center justify-end gap-1.5">
-                              <Link
-                                aria-label="Edit transaction"
-                                href={withViewState({ editId: transaction.id, openAdd: null, confirmDeleteId: null })}
-                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm text-slate-700"
-                              >
-                                âœŽ
-                              </Link>
-                              <Link
-                                aria-label="Delete transaction"
-                                href={withViewState({ editId: null, confirmDeleteId: transaction.id })}
-                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-sm text-rose-700"
-                              >
-                                ðŸ—‘
-                              </Link>
-                            </div>
-                          </div>
-                        </summary>
-
-                        <div className="mt-2 border-t border-slate-200 pt-2">
-                          <div className="grid gap-2 rounded-xl bg-slate-50 p-3 text-xs text-slate-600 sm:grid-cols-2">
-                            {transaction.merchant ? (
-                              <p>
-                                <span className="font-medium text-slate-800">Merchant:</span> {transaction.merchant}
+                      <div className="hidden md:block">
+                        <div className="grid grid-cols-[7rem_1.9fr_1fr_1fr_8rem_9rem] items-center gap-3">
+                          <p className="text-sm text-slate-600">{formatDate(transaction.occurredAt)}</p>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
+                                {(() => {
+                                  const Icon = transactionIcon(transaction.type);
+                                  return <Icon className="h-4 w-4" />;
+                                })()}
+                              </span>
+                              <p className="truncate text-sm font-semibold text-slate-900">
+                                {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
                               </p>
-                            ) : null}
-                            <p>
-                              <span className="font-medium text-slate-800">Type:</span> {typeLabelMap[transaction.type as TransactionType]}
-                            </p>
-                            <p>
-                              <span className="font-medium text-slate-800">Category:</span> {categoryName === "-" ? "Not set" : categoryName}
-                            </p>
-                            <p>
-                              <span className="font-medium text-slate-800">Account:</span> {accountLabel}
-                            </p>
-                            <p className="sm:col-span-2">
-                              <span className="font-medium text-slate-800">Notes:</span> {transaction.notes ?? "No notes"}
-                            </p>
-                          </div>
-
-                        <div className="md:hidden">
-                          <details className="group rounded-xl">
-                            <summary className="list-none rounded-xl p-1">
-                              <div className="flex items-start justify-between gap-3">
-                                <div className="min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <span className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
-                                      {(() => {
-                                        const Icon = transactionIcon(transaction.type);
-                                        return <Icon className="h-4 w-4" />;
-                                      })()}
-                                    </span>
-                                    <div className="min-w-0">
-                                      <p className="truncate text-sm font-semibold text-slate-900">
-                                        {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
-                                      </p>
-                                      <p className="truncate text-xs text-slate-500">{categoryName === "-" ? typeLabelMap[transaction.type as TransactionType] : categoryName}</p>
-                                    </div>
-                                  </div>
-                                  <p className="mt-1 truncate text-xs text-slate-500">{accountLabel}</p>
-                                </div>
-                                <div className="text-right">
-                                  <p className={`text-sm font-semibold ${sign === "+" ? "text-emerald-700" : sign === "-" ? "text-slate-900" : "text-slate-700"}`}>
-                                    {amountLabel}
-                          {confirmDeleteId === transaction.id ? (
-                            <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
-                              <p className="text-sm font-semibold text-rose-900">Delete this transaction?</p>
-                              <p className="mt-1 text-xs text-rose-800">This updates account balances and monthly reports.</p>
-                              <div className="mt-3 flex gap-2">
-                                <Link
-                                  href={withViewState({ confirmDeleteId: null })}
-                                  className="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-700"
-                                >
-                                  Cancel
-                                </Link>
-                                <form action={deleteTransactionAction}>
-                                  <input type="hidden" name="transactionId" value={transaction.id} />
-                                  <button className="rounded-lg bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-700">
-                                    Delete
-                                  </button>
-                                </form>
-                              </div>
                             </div>
-                          ) : null}
+                          </div>
+                          <div className="min-w-0">
+                            {categoryName === "-" ? (
+                              <span className="text-sm text-slate-400">?</span>
+                            ) : (
+                              <CategoryChip name={categoryName} className="max-w-full truncate" />
+                            )}
+                          </div>
+                          <p className="truncate text-sm text-slate-600">{accountLabel}</p>
+                          <p className={`text-right text-sm font-semibold ${sign === "+" ? "text-emerald-700" : sign === "-" ? "text-slate-900" : "text-slate-700"}`}>
+                            {amountLabel}
+                          </p>
+                          <div className="flex items-center justify-end gap-1.5">
+                            <Link
+                              aria-label="Edit transaction"
+                              href={withViewState({ editId: transaction.id, openAdd: null, confirmDeleteId: null })}
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm text-slate-700"
+                            >
+                              ?
+                            </Link>
+                            <Link
+                              aria-label="Delete transaction"
+                              href={withViewState({ editId: null, confirmDeleteId: transaction.id })}
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-sm text-rose-700"
+                            >
+                              ??
+                            </Link>
+                          </div>
                         </div>
-                      </details>
+                        {confirmDeleteId === transaction.id ? (
+                          <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
+                            <p className="text-sm font-semibold text-rose-900">Delete this transaction?</p>
+                            <p className="mt-1 text-xs text-rose-800">This updates account balances and monthly reports.</p>
+                            <div className="mt-3 flex gap-2">
+                              <Link
+                                href={withViewState({ confirmDeleteId: null })}
+                                className="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-700"
+                              >
+                                Cancel
+                              </Link>
+                              <form action={deleteTransactionAction}>
+                                <input type="hidden" name="transactionId" value={transaction.id} />
+                                <button className="rounded-lg bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-700">
+                                  Delete
+                                </button>
+                              </form>
+                            </div>
+                          </div>
+                        ) : null}
+                      </div>
 
-                      <details className="group md:hidden">
-                        <summary className="list-none cursor-pointer rounded-xl border border-slate-200 bg-slate-50/40 p-2">
-                          <div className="flex items-start justify-between gap-2">
+                      <div className="md:hidden">
+                        <div className="rounded-xl border border-slate-200 bg-slate-50/40 p-3">
+                          <div className="flex items-start justify-between gap-3">
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-2">
                                 <span className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
-                                  {transactionIcon(transaction.type)}
+                                  {(() => {
+                                    const Icon = transactionIcon(transaction.type);
+                                    return <Icon className="h-4 w-4" />;
+                                  })()}
                                 </span>
                                 <div className="min-w-0 flex-1">
                                   <p className="truncate text-sm font-semibold text-slate-900">
@@ -794,66 +737,44 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
                                   href={withViewState({ editId: transaction.id, openAdd: null, confirmDeleteId: null })}
                                   className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm text-slate-700"
                                 >
-                                  âœŽ
+                                  ?
                                 </Link>
                                 <Link
                                   aria-label="Delete transaction"
                                   href={withViewState({ editId: null, confirmDeleteId: transaction.id })}
                                   className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-sm text-rose-700"
                                 >
-                                  ðŸ—‘
+                                  ??
                                 </Link>
                               </div>
                             </div>
                           </div>
-                        </summary>
-
-                        <div className="mt-2 rounded-xl border border-slate-200 bg-white p-2">
-                          <div className="space-y-1.5 rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-600">
-                            <p>
-                              <span className="font-medium text-slate-800">Date:</span> {formatDate(transaction.occurredAt)}
-                            </p>
-                            {transaction.merchant ? (
-                              <p>
-                                <span className="font-medium text-slate-800">Merchant:</span> {transaction.merchant}
-                              </p>
+                          <div className="mt-3 rounded-lg bg-white p-2 text-xs text-slate-600">
+                            <div className="space-y-1.5">
+                              <p><span className="font-medium text-slate-800">Date:</span> {formatDate(transaction.occurredAt)}</p>
+                              {transaction.merchant ? <p><span className="font-medium text-slate-800">Merchant:</span> {transaction.merchant}</p> : null}
+                              <p><span className="font-medium text-slate-800">Category:</span> {categoryName === "-" ? "Not set" : categoryName}</p>
+                              <p><span className="font-medium text-slate-800">Account:</span> {accountLabel}</p>
+                              <p><span className="font-medium text-slate-800">Notes:</span> {transaction.notes ?? "No notes"}</p>
+                            </div>
+                            {confirmDeleteId === transaction.id ? (
+                              <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
+                                <p className="text-sm font-semibold text-rose-900">Delete this transaction?</p>
+                                <p className="mt-1 text-xs text-rose-800">This updates account balances and monthly reports.</p>
+                                <div className="mt-3 flex gap-2">
+                                  <Link href={withViewState({ confirmDeleteId: null })} className="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-700">Cancel</Link>
+                                  <form action={deleteTransactionAction}>
+                                    <input type="hidden" name="transactionId" value={transaction.id} />
+                                    <button className="rounded-lg bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-700">Delete</button>
+                                  </form>
+                                </div>
+                              </div>
                             ) : null}
-                            <p>
-                              <span className="font-medium text-slate-800">Category:</span> {categoryName === "-" ? "Not set" : categoryName}
-                            </p>
-                            <p>
-                              <span className="font-medium text-slate-800">Account:</span> {accountLabel}
-                            </p>
-                            <p>
-                              <span className="font-medium text-slate-800">Notes:</span> {transaction.notes ?? "No notes"}
-                            </p>
                           </div>
-
-                          {confirmDeleteId === transaction.id ? (
-                            <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
-                              <p className="text-sm font-semibold text-rose-900">Delete this transaction?</p>
-                              <p className="mt-1 text-xs text-rose-800">This updates account balances and monthly reports.</p>
-                              <div className="mt-3 flex gap-2">
-                                <Link
-                                  href={withViewState({ confirmDeleteId: null })}
-                                  className="rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-medium text-rose-700"
-                                >
-                                  Cancel
-                                </Link>
-                                <form action={deleteTransactionAction}>
-                                  <input type="hidden" name="transactionId" value={transaction.id} />
-                                  <button className="rounded-lg bg-rose-600 px-3 py-2 text-sm font-semibold text-white hover:bg-rose-700">
-                                    Delete
-                                  </button>
-                                </form>
-                              </div>
-                            </div>
-                          ) : null}
                         </div>
-                      </details>
+                      </div>
                     </article>
-                  );
-                })}
+                  );                })}
               </div>
             </section>
           ))

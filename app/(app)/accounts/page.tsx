@@ -109,6 +109,7 @@ export default async function AccountsPage() {
             <span>Add account</span>
           </button>
         </form>
+      </section>
       <section className="grid grid-cols-3 gap-3">
         <article className="rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_18px_30px_rgba(15,23,42,0.03)]">
           <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Total assets</p>
