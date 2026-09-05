@@ -19,7 +19,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-3 py-3 md:px-5">
             <div className="flex items-center gap-2">
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-base font-bold text-primary">
-                â‚¹
+                ₹
               </span>
               <p className="text-sm font-medium text-muted-foreground">Money overview</p>
             </div>

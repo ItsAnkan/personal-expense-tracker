@@ -1,5 +1,7 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import NorthEastIcon from "@mui/icons-material/NorthEast";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
 import SearchIcon from "@mui/icons-material/Search";
@@ -361,7 +363,7 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
             <p className="text-[11px] uppercase tracking-[0.2em] text-slate-300">Transactions</p>
             <h1 className="mt-1 text-3xl font-bold text-white md:text-4xl">All financial activity</h1>
             <p className="mt-2 text-sm text-slate-200">
-              {dateSummaryLabel} Â· {transactions.length} records Â· {formatInr(spent)} spent Â· {formatInr(income)} income
+              {dateSummaryLabel} · {transactions.length} records · {formatInr(spent)} spent · {formatInr(income)} income
             </p>
           </div>
           <div className="flex w-full gap-2 md:w-auto">
@@ -600,27 +602,13 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
                   const amountLabel = sign === "neutral" ? formatInr(amount) : `${sign}${formatInr(amount)}`;
                   const accountLabel =
                     transaction.type === "TRANSFER" || transaction.type === "CREDIT_CARD_PAYMENT"
-                      ? `${transaction.fromAccount?.name ?? "-"} â†’ ${transaction.toAccount?.name ?? "-"}`
+                      ? `${transaction.fromAccount?.name ?? "-"} → ${transaction.toAccount?.name ?? "-"}`
                       : transaction.type === "INCOME" || transaction.type === "REFUND"
                         ? transaction.toAccount?.name ?? "-"
                         : transaction.fromAccount?.name ?? "-";
 
                   if (isEditing) {
                     return (
-                      <article key={transaction.id} className={`border-t border-slate-200 px-4 py-3 first:border-t-0 ${isViewing ? "bg-slate-50/70" : ""}`}>
-                        <div className="hidden grid-cols-[7rem_1.9fr_1fr_1fr_8rem_8rem] items-center gap-3 md:grid">
-                          <p className="text-sm text-slate-600">{formatDate(transaction.occurredAt)}</p>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                              <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
-                                {(() => {
-                                  const Icon = transactionIcon(transaction.type);
-                                  return <Icon className="h-4 w-4" />;
-                                })()}
-                              </span>
-                              <p className="truncate text-sm font-semibold text-slate-900">
-                                {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
-                              </p>
                       <article key={transaction.id} className="border-t border-slate-200 p-4 first:border-t-0">
                         <p className="text-xs font-semibold tracking-[0.12em] text-slate-500 uppercase">Editing transaction</p>
                         <TransactionForm
@@ -659,7 +647,10 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
                             <div className="min-w-0">
                               <div className="flex items-center gap-2">
                                 <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
-                                  {transactionIcon(transaction.type)}
+                                  {(() => {
+                                    const Icon = transactionIcon(transaction.type);
+                                    return <Icon className="h-4 w-4" />;
+                                  })()}
                                 </span>
                                 <p className="truncate text-sm font-semibold text-slate-900">
                                   {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
@@ -668,7 +659,7 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
                             </div>
                             <div className="min-w-0">
                               {categoryName === "-" ? (
-                                <span className="text-sm text-slate-400">â€”</span>
+                                <span className="text-sm text-slate-400">—</span>
                               ) : (
                                 <CategoryChip name={categoryName} className="max-w-full truncate" />
                               )}
@@ -681,66 +672,22 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
                               <Link
                                 aria-label="Edit transaction"
                                 href={withViewState({ editId: transaction.id, openAdd: null, confirmDeleteId: null })}
-                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm text-slate-700"
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm text-slate-700 transition hover:bg-slate-50"
                               >
-                                âœŽ
+                                <EditOutlinedIcon className="h-4 w-4" />
                               </Link>
                               <Link
                                 aria-label="Delete transaction"
                                 href={withViewState({ editId: null, confirmDeleteId: transaction.id })}
-                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-sm text-rose-700"
+                                className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-sm text-rose-700 transition hover:bg-rose-100"
                               >
-                                ðŸ—‘
+                                <DeleteOutlineIcon className="h-4 w-4" />
                               </Link>
                             </div>
                           </div>
                         </summary>
 
                         <div className="mt-2 border-t border-slate-200 pt-2">
-                          <div className="grid gap-2 rounded-xl bg-slate-50 p-3 text-xs text-slate-600 sm:grid-cols-2">
-                            {transaction.merchant ? (
-                              <p>
-                                <span className="font-medium text-slate-800">Merchant:</span> {transaction.merchant}
-                              </p>
-                            ) : null}
-                            <p>
-                              <span className="font-medium text-slate-800">Type:</span> {typeLabelMap[transaction.type as TransactionType]}
-                            </p>
-                            <p>
-                              <span className="font-medium text-slate-800">Category:</span> {categoryName === "-" ? "Not set" : categoryName}
-                            </p>
-                            <p>
-                              <span className="font-medium text-slate-800">Account:</span> {accountLabel}
-                            </p>
-                            <p className="sm:col-span-2">
-                              <span className="font-medium text-slate-800">Notes:</span> {transaction.notes ?? "No notes"}
-                            </p>
-                          </div>
-
-                        <div className="md:hidden">
-                          <details className="group rounded-xl">
-                            <summary className="list-none rounded-xl p-1">
-                              <div className="flex items-start justify-between gap-3">
-                                <div className="min-w-0">
-                                  <div className="flex items-center gap-2">
-                                    <span className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
-                                      {(() => {
-                                        const Icon = transactionIcon(transaction.type);
-                                        return <Icon className="h-4 w-4" />;
-                                      })()}
-                                    </span>
-                                    <div className="min-w-0">
-                                      <p className="truncate text-sm font-semibold text-slate-900">
-                                        {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
-                                      </p>
-                                      <p className="truncate text-xs text-slate-500">{categoryName === "-" ? typeLabelMap[transaction.type as TransactionType] : categoryName}</p>
-                                    </div>
-                                  </div>
-                                  <p className="mt-1 truncate text-xs text-slate-500">{accountLabel}</p>
-                                </div>
-                                <div className="text-right">
-                                  <p className={`text-sm font-semibold ${sign === "+" ? "text-emerald-700" : sign === "-" ? "text-slate-900" : "text-slate-700"}`}>
-                                    {amountLabel}
                           {confirmDeleteId === transaction.id ? (
                             <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
                               <p className="text-sm font-semibold text-rose-900">Delete this transaction?</p>
@@ -770,7 +717,10 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-2">
                                 <span className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
-                                  {transactionIcon(transaction.type)}
+                                  {(() => {
+                                    const Icon = transactionIcon(transaction.type);
+                                    return <Icon className="h-4 w-4" />;
+                                  })()}
                                 </span>
                                 <div className="min-w-0 flex-1">
                                   <p className="truncate text-sm font-semibold text-slate-900">
@@ -792,16 +742,16 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
                                 <Link
                                   aria-label="Edit transaction"
                                   href={withViewState({ editId: transaction.id, openAdd: null, confirmDeleteId: null })}
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm text-slate-700"
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm text-slate-700 transition hover:bg-slate-50"
                                 >
-                                  âœŽ
+                                  <EditOutlinedIcon className="h-4 w-4" />
                                 </Link>
                                 <Link
                                   aria-label="Delete transaction"
                                   href={withViewState({ editId: null, confirmDeleteId: transaction.id })}
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-sm text-rose-700"
+                                  className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 bg-rose-50 text-sm text-rose-700 transition hover:bg-rose-100"
                                 >
-                                  ðŸ—‘
+                                  <DeleteOutlineIcon className="h-4 w-4" />
                                 </Link>
                               </div>
                             </div>

@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 import { requireUserSession } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { ThemePreferences } from "@/components/settings/theme-preferences";
@@ -18,7 +20,7 @@ export default async function SettingsPage() {
   });
 
   if (!user) {
-    throw new Error("User record not found.");
+    redirect("/sign-in");
   }
 
   return (

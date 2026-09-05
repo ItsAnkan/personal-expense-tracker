@@ -75,40 +75,6 @@ export default async function AccountsPage() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 shadow-sm">
-        <h2 className="text-lg font-semibold">Create account</h2>
-        <form action={createAccountAction} className="mt-3 grid gap-2 md:grid-cols-3">
-          <input
-            name="name"
-            placeholder="HDFC Savings"
-            required
-            className="h-10 rounded-md border border-emerald-200 bg-white px-3"
-          />
-          <select name="type" defaultValue="BANK_ACCOUNT" className="h-10 rounded-md border border-emerald-200 bg-white px-3">
-            <option value="BANK_ACCOUNT">Bank Account</option>
-            <option value="CASH">Cash</option>
-            <option value="CREDIT_CARD">Credit Card</option>
-            <option value="WALLET">Wallet</option>
-            <option value="OTHER">Other</option>
-          </select>
-          <input
-            name="openingBalance"
-            type="number"
-            step="0.01"
-            defaultValue="0"
-            className="h-10 rounded-md border border-emerald-200 bg-white px-3"
-          />
-          <input name="currency" defaultValue="INR" className="h-10 rounded-md border border-emerald-200 bg-white px-3" />
-          <input
-            name="notes"
-            placeholder="Optional notes"
-            className="h-10 rounded-md border border-emerald-200 bg-white px-3 md:col-span-2"
-          />
-          <button className="inline-flex h-10 items-center justify-center gap-1.5 rounded-md bg-emerald-700 px-4 text-sm font-semibold text-white transition hover:bg-emerald-800 md:col-span-3">
-            <AddIcon className="h-4 w-4" />
-            <span>Add account</span>
-          </button>
-        </form>
       <section className="grid grid-cols-3 gap-3">
         <article className="rounded-[24px] border border-slate-200 bg-white p-4 shadow-[0_18px_30px_rgba(15,23,42,0.03)]">
           <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">Total assets</p>
@@ -152,7 +118,7 @@ export default async function AccountsPage() {
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-white/70 text-sm font-semibold shadow-sm">
-                          {account.type === "CREDIT_CARD" ? "C" : account.type === "CASH" ? "â‚¹" : account.type === "WALLET" ? "W" : "A"}
+                          {account.type === "CREDIT_CARD" ? "C" : account.type === "CASH" ? "₹" : account.type === "WALLET" ? "W" : "A"}
                         </span>
                         <div className="min-w-0">
                           <p className="truncate text-base font-semibold text-slate-900">{account.name}</p>
