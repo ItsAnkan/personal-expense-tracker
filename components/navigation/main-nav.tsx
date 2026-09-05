@@ -15,11 +15,11 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/dashboard", label: "Dashboard", mobileLabel: "Home", icon: "dashboard" as const },
   { href: "/transactions", label: "Transactions", mobileLabel: "Txns", icon: "transactions" as const },
-  { href: "/accounts", label: "Accounts", mobileLabel: "Accounts", icon: "accounts" as const },
-  { href: "/categories", label: "Categories", mobileLabel: "Categories", icon: "categories" as const },
-  { href: "/insights", label: "Insights", mobileLabel: "Insights", icon: "insights" as const },
-  { href: "/monthly-history", label: "History", mobileLabel: "History", icon: "history" as const },
-  { href: "/settings", label: "Settings", mobileLabel: "Settings", icon: "settings" as const },
+  { href: "/accounts", label: "Accounts", mobileLabel: "Accts", icon: "accounts" as const },
+  { href: "/categories", label: "Categories", mobileLabel: "Cats", icon: "categories" as const },
+  { href: "/insights", label: "Insights", mobileLabel: "Insig", icon: "insights" as const },
+  { href: "/monthly-history", label: "History", mobileLabel: "Hist", icon: "history" as const },
+  { href: "/settings", label: "Settings", mobileLabel: "Set", icon: "settings" as const },
 ];
 
 export function MainNav() {
@@ -65,7 +65,7 @@ export function MainNav() {
       </nav>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-card/95 pb-[max(env(safe-area-inset-bottom),0.5rem)] shadow-[0_-12px_24px_rgba(15,23,42,0.08)] backdrop-blur-xl md:hidden">
-        <div className="grid grid-cols-7 gap-1 px-2 py-2">
+        <div className="grid grid-cols-7 gap-0 px-1 py-1">
           {navItems.map((item) => {
             const active = pathname.startsWith(item.href);
             return (
@@ -74,14 +74,14 @@ export function MainNav() {
                 href={item.href}
                 aria-label={item.label}
                 className={cn(
-                  "flex items-center justify-center rounded-2xl px-1 py-2.5 transition-all",
+                  "flex flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-2 transition-all",
                   active
                     ? "bg-primary text-primary-foreground shadow-sm"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )}
               >
                 <NavIcon icon={item.icon} />
-                <span className="sr-only">{item.mobileLabel}</span>
+                <span className="mt-0.5 text-[9px] font-medium leading-none tracking-tight">{item.mobileLabel}</span>
               </Link>
             );
           })}
@@ -105,3 +105,4 @@ function NavIcon({ icon }: { icon: (typeof navItems)[number]["icon"] }) {
   const Icon = navIconMap[icon];
   return <Icon className="h-5 w-5" />;
 }
+

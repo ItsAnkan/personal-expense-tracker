@@ -1,5 +1,3 @@
-import { Prisma } from "@prisma/client";
-
 import { assertTransactionAccountRules } from "@/domain/accounting/rules";
 import type { LedgerTransaction } from "@/domain/accounting/types";
 import { validateTransactionInput } from "@/domain/transactions/validators";
@@ -29,7 +27,7 @@ export async function createTransactionUseCase(userId: string, rawInput: unknown
   return createTransaction({
     userId,
     type: input.type,
-    amount: new Prisma.Decimal(input.amount.toFixed(2)),
+    amount: Number(input.amount.toFixed(2)),
     occurredAt: input.occurredAt,
     fromAccountId: input.fromAccountId ?? null,
     toAccountId: input.toAccountId ?? null,

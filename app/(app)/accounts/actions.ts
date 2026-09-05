@@ -1,6 +1,6 @@
 "use server";
 
-import { AccountType, Prisma } from "@prisma/client";
+import { AccountType } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 import { requireUserSession } from "@/lib/auth/session";
@@ -33,7 +33,7 @@ export async function createAccountAction(formData: FormData) {
     userId: session.user.id,
     name,
     type: typeValue as AccountType,
-    openingBalance: new Prisma.Decimal(openingBalance.toFixed(2)),
+    openingBalance: Number(openingBalance.toFixed(2)),
     currency,
     notes: notesInput.length > 0 ? notesInput : null,
   });

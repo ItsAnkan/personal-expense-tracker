@@ -36,6 +36,7 @@ export default function SignUpPage() {
       return;
     }
 
+    setIsSubmitting(false);
     router.push("/sign-in?created=1");
   }
 

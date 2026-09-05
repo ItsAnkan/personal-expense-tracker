@@ -117,18 +117,18 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               />
             </div>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="mt-5 grid grid-cols-3 gap-2">
               <div className="rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3">
                 <p className="text-[10px] uppercase tracking-[0.18em] text-emerald-200">Income</p>
-                <p className="mt-2 text-xl font-semibold text-white">{formatInr(data.income)}</p>
+                <p className="mt-1.5 text-base font-semibold text-white sm:text-xl">{formatInr(data.income)}</p>
               </div>
               <div className="rounded-2xl border border-rose-300/20 bg-rose-400/10 p-3">
                 <p className="text-[10px] uppercase tracking-[0.18em] text-rose-200">Spent</p>
-                <p className="mt-2 text-xl font-semibold text-white">{formatInr(data.expenses)}</p>
+                <p className="mt-1.5 text-base font-semibold text-white sm:text-xl">{formatInr(data.expenses)}</p>
               </div>
               <div className="rounded-2xl border border-sky-300/20 bg-sky-400/10 p-3">
                 <p className="text-[10px] uppercase tracking-[0.18em] text-sky-200">Net</p>
-                <p className="mt-2 text-xl font-semibold text-white">{formatInr(data.netCashFlow)}</p>
+                <p className="mt-1.5 text-base font-semibold text-white sm:text-xl">{formatInr(data.netCashFlow)}</p>
               </div>
             </div>
           </div>
@@ -389,3 +389,4 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     </main>
   );
 }
+
