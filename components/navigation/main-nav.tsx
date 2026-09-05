@@ -1,5 +1,12 @@
 ﻿"use client";
 
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import CategoryIcon from "@mui/icons-material/Category";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import HistoryIcon from "@mui/icons-material/History";
+import InsightsIcon from "@mui/icons-material/Insights";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import SettingsIcon from "@mui/icons-material/Settings";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -84,74 +91,18 @@ export function MainNav() {
   );
 }
 
-function NavIcon({ icon }: { icon: (typeof navItems)[number]["icon"] }) {
-  const common = "h-5 w-5";
+const navIconMap = {
+  dashboard: DashboardIcon,
+  transactions: ReceiptLongIcon,
+  accounts: AccountBalanceWalletIcon,
+  categories: CategoryIcon,
+  insights: InsightsIcon,
+  history: HistoryIcon,
+  settings: SettingsIcon,
+} as const;
 
-  if (icon === "dashboard") {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common}>
-        <rect x="3" y="3" width="8" height="8" rx="2" />
-        <rect x="13" y="3" width="8" height="5" rx="2" />
-        <rect x="13" y="10" width="8" height="11" rx="2" />
-        <rect x="3" y="13" width="8" height="8" rx="2" />
-      </svg>
-    );
-  }
-  if (icon === "transactions") {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common}>
-        <path d="M4 7h16" />
-        <path d="M4 12h10" />
-        <path d="M4 17h7" />
-        <path d="M18 11l3 3-3 3" />
-      </svg>
-    );
-  }
-  if (icon === "accounts") {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common}>
-        <rect x="2.5" y="5" width="19" height="14" rx="3" />
-        <path d="M2.5 10h19" />
-        <path d="M7 15h3" />
-      </svg>
-    );
-  }
-  if (icon === "categories") {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common}>
-        <path d="M4 6h6" />
-        <path d="M4 12h10" />
-        <path d="M4 18h14" />
-        <circle cx="16.5" cy="6" r="1.5" />
-        <circle cx="20.5" cy="12" r="1.5" />
-        <circle cx="18.5" cy="18" r="1.5" />
-      </svg>
-    );
-  }
-  if (icon === "insights") {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common}>
-        <path d="M6 18V9" />
-        <path d="M12 18V5" />
-        <path d="M18 18v-7" />
-        <path d="M4 18h16" />
-      </svg>
-    );
-  }
-  if (icon === "history") {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common}>
-        <path d="M3 12a9 9 0 1 0 3-6.71" />
-        <path d="M3 4v4h4" />
-        <path d="M12 7v6l4 2" />
-      </svg>
-    );
-  }
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={common}>
-      <circle cx="12" cy="12" r="3" />
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-    </svg>
-  );
+function NavIcon({ icon }: { icon: (typeof navItems)[number]["icon"] }) {
+  const Icon = navIconMap[icon];
+  return <Icon className="h-5 w-5" />;
 }
 

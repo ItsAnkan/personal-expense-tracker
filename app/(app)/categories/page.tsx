@@ -1,3 +1,8 @@
+import AddIcon from "@mui/icons-material/Add";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 import {
   createCategoryAction,
   deleteCategoryAction,
@@ -52,8 +57,9 @@ export default async function CategoriesPage() {
               </option>
             ))}
           </select>
-          <button className="h-10 rounded-md bg-indigo-700 px-4 text-sm font-semibold text-white">
-            Add category
+          <button className="inline-flex h-10 items-center justify-center gap-1.5 rounded-md bg-indigo-700 px-4 text-sm font-semibold text-white transition hover:bg-indigo-800">
+            <AddIcon className="h-4 w-4" />
+            <span>Add category</span>
           </button>
         </form>
       </section>
@@ -121,8 +127,12 @@ function DeleteButton({ id }: { id: string }) {
   return (
     <form action={deleteCategoryAction}>
       <input type="hidden" name="id" value={id} />
-      <button className="h-9 rounded-md border border-rose-300 bg-rose-50 px-3 text-sm text-rose-700">
-        Delete
+      <button
+        aria-label="Delete category"
+        className="inline-flex h-9 items-center justify-center gap-1 rounded-md border border-rose-300 bg-rose-50 px-2.5 text-sm font-medium text-rose-700 transition hover:bg-rose-100"
+      >
+        <DeleteIcon className="h-4 w-4" />
+        <span className="sr-only sm:not-sr-only">Delete</span>
       </button>
     </form>
   );
@@ -134,12 +144,22 @@ function ReorderButtons({ id }: { id: string }) {
       <form action={moveCategoryAction}>
         <input type="hidden" name="id" value={id} />
         <input type="hidden" name="direction" value="up" />
-        <button className="h-9 rounded-md border border-amber-300 bg-white px-2 text-xs">Up</button>
+        <button
+          aria-label="Move category up"
+          className="inline-flex h-9 w-8 items-center justify-center rounded-md border border-amber-300 bg-white text-xs font-medium text-amber-900 transition hover:bg-amber-50"
+        >
+          <ArrowUpwardIcon className="h-4 w-4" />
+        </button>
       </form>
       <form action={moveCategoryAction}>
         <input type="hidden" name="id" value={id} />
         <input type="hidden" name="direction" value="down" />
-        <button className="h-9 rounded-md border border-amber-300 bg-white px-2 text-xs">Down</button>
+        <button
+          aria-label="Move category down"
+          className="inline-flex h-9 w-8 items-center justify-center rounded-md border border-amber-300 bg-white text-xs font-medium text-amber-900 transition hover:bg-amber-50"
+        >
+          <ArrowDownwardIcon className="h-4 w-4" />
+        </button>
       </form>
     </div>
   );

@@ -1,4 +1,12 @@
-﻿import Link from "next/link";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import NorthEastIcon from "@mui/icons-material/NorthEast";
+import RotateLeftIcon from "@mui/icons-material/RotateLeft";
+import SearchIcon from "@mui/icons-material/Search";
+import SouthEastIcon from "@mui/icons-material/SouthEast";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import SyncAltIcon from "@mui/icons-material/SyncAlt";
+import Link from "next/link";
 
 import {
   createTransactionAction,
@@ -109,20 +117,16 @@ function getTransactionSign(type: string): "+" | "-" | "neutral" {
   return "neutral";
 }
 
-function transactionIcon(type: string): string {
-  if (type === "INCOME") {
-    return "â†—";
-  }
-  if (type === "EXPENSE") {
-    return "â†˜";
-  }
-  if (type === "TRANSFER") {
-    return "â†”";
-  }
-  if (type === "CREDIT_CARD_PAYMENT") {
-    return "â‡„";
-  }
-  return "âŸ²";
+const transactionIconMap = {
+  INCOME: NorthEastIcon,
+  EXPENSE: SouthEastIcon,
+  TRANSFER: SwapHorizIcon,
+  CREDIT_CARD_PAYMENT: SyncAltIcon,
+  REFUND: RotateLeftIcon,
+} as const;
+
+function transactionIcon(type: string) {
+  return transactionIconMap[type as keyof typeof transactionIconMap] ?? RotateLeftIcon;
 }
 
 function typeTone(type: string): string {
@@ -397,18 +401,20 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
           <div className="flex items-center gap-2">
             <Link
               href={withParams({ month: previousMonth, datePreset: "this-month" })}
-              className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+              aria-label="Previous month"
             >
-              â†
+              <ArrowBackIcon className="h-4 w-4" />
             </Link>
             <span className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-800">
               {monthLabel}
             </span>
             <Link
               href={withParams({ month: nextMonth, datePreset: "this-month" })}
-              className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+              className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+              aria-label="Next month"
             >
-              â†’
+              <ArrowForwardIcon className="h-4 w-4" />
             </Link>
           </div>
           <p className="text-sm text-slate-500">Find, review, and correct entries in seconds.</p>
@@ -419,7 +425,9 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
           <input type="hidden" name="datePreset" value={datePreset} />
           <label className="relative col-span-2 block">
             <span className="sr-only">Search transactions</span>
-            <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-slate-400">âŒ•</span>
+            <span className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-slate-400">
+              <SearchIcon className="h-4 w-4" />
+            </span>
             <input
               name="q"
               defaultValue={q ?? ""}
@@ -599,6 +607,20 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
 
                   if (isEditing) {
                     return (
+                      <article key={transaction.id} className={`border-t border-slate-200 px-4 py-3 first:border-t-0 ${isViewing ? "bg-slate-50/70" : ""}`}>
+                        <div className="hidden grid-cols-[7rem_1.9fr_1fr_1fr_8rem_8rem] items-center gap-3 md:grid">
+                          <p className="text-sm text-slate-600">{formatDate(transaction.occurredAt)}</p>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <span className={`inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
+                                {(() => {
+                                  const Icon = transactionIcon(transaction.type);
+                                  return <Icon className="h-4 w-4" />;
+                                })()}
+                              </span>
+                              <p className="truncate text-sm font-semibold text-slate-900">
+                                {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
+                              </p>
                       <article key={transaction.id} className="border-t border-slate-200 p-4 first:border-t-0">
                         <p className="text-xs font-semibold tracking-[0.12em] text-slate-500 uppercase">Editing transaction</p>
                         <TransactionForm
@@ -695,6 +717,30 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
                             </p>
                           </div>
 
+                        <div className="md:hidden">
+                          <details className="group rounded-xl">
+                            <summary className="list-none rounded-xl p-1">
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="min-w-0">
+                                  <div className="flex items-center gap-2">
+                                    <span className={`inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-sm font-semibold ${typeTone(transaction.type)}`}>
+                                      {(() => {
+                                        const Icon = transactionIcon(transaction.type);
+                                        return <Icon className="h-4 w-4" />;
+                                      })()}
+                                    </span>
+                                    <div className="min-w-0">
+                                      <p className="truncate text-sm font-semibold text-slate-900">
+                                        {transaction.merchant ?? (transaction.type === "TRANSFER" ? "Account transfer" : typeLabelMap[transaction.type as TransactionType])}
+                                      </p>
+                                      <p className="truncate text-xs text-slate-500">{categoryName === "-" ? typeLabelMap[transaction.type as TransactionType] : categoryName}</p>
+                                    </div>
+                                  </div>
+                                  <p className="mt-1 truncate text-xs text-slate-500">{accountLabel}</p>
+                                </div>
+                                <div className="text-right">
+                                  <p className={`text-sm font-semibold ${sign === "+" ? "text-emerald-700" : sign === "-" ? "text-slate-900" : "text-slate-700"}`}>
+                                    {amountLabel}
                           {confirmDeleteId === transaction.id ? (
                             <div className="mt-3 rounded-xl border border-rose-200 bg-rose-50 p-3">
                               <p className="text-sm font-semibold text-rose-900">Delete this transaction?</p>

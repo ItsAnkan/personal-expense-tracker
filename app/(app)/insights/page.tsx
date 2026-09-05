@@ -1,3 +1,6 @@
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+
 import Link from "next/link";
 
 import { AIInsightPreview } from "@/components/insights/ai-insight-preview";
@@ -118,12 +121,14 @@ export default async function InsightsPage({ searchParams }: InsightsPageProps) 
             <h1 className="mt-2 text-2xl font-bold tracking-[-0.05em] text-slate-900 md:text-3xl">Understand your financial patterns</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Link href={`/insights?month=${previousMonth}`} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100">
-              ← Prev
-            </Link>
-            <Link href={`/insights?month=${nextMonth}`} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 transition hover:bg-slate-100">
-              Next →
-            </Link>
+            <a href={`/insights?month=${previousMonth}`} className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 hover:bg-slate-100">
+              <ArrowBackIcon className="h-4 w-4" />
+              <span>Prev</span>
+            </a>
+            <a href={`/insights?month=${nextMonth}`} className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 hover:bg-slate-100">
+              <span>Next</span>
+              <ArrowForwardIcon className="h-4 w-4" />
+            </a>
           </div>
         </div>
         <div className="mt-4 inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-medium text-slate-700">
